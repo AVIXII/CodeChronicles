@@ -25,7 +25,7 @@
 //                                                    /\ \/ | >< | |
 
 /* ------------------------------------------------------ Pragmas ------------------------------------------------------ */
-#pragma GCC optimize("O3, unroll-loops")
+#pragma GCC optimize("O3")
 
 /* ------------------------------------------------------ Includes ----------------------------------------------------- */
 #include <bits/stdc++.h>
@@ -91,8 +91,8 @@ typedef unsigned long long int uint64;
 
 /* ----------------------------------------------------- Directions ---------------------------------------------------- */
 // i++ for octadirectinal, i+=2 for quadradirectional
-int dx8[] = { -1, -1, 0, 1, 1, 1, 0, -1};
-int dy8[] = {0, 1, 1, 1, 0, -1, -1, -1};
+int rotx[] = { -1, -1, 0, 1, 1, 1, 0, -1};
+int roty[] = {0, 1, 1, 1, 0, -1, -1, -1};
 
 /* ------------------------------------------------------ Utility ------------------------------------------------------ */
 string to_upper(string a) {
@@ -109,19 +109,13 @@ string to_lower(string a) {
     return a;
 }
 
-void yes() {
-    cout << "YES" << endl;
-}
+void yes() { cout << "YES" << endl; }
 
-void no() {
-    cout << "NO" << endl;
-}
+void no() { cout << "NO" << endl; }
 
 mt19937 rng(steady_clock::now().time_since_epoch().count());
 
-ll random(ll l, ll r) {
-    return uniform_int_distribution<ll>(l, r)(rng);
-}
+ll random(ll l, ll r) { return uniform_int_distribution<ll>(l, r)(rng); }
 
 /* ----------------------------------------- Exponentiation & Modulo Arithmetic ---------------------------------------- */
 ll exp(ll a, ll b, ll mod) {
@@ -178,7 +172,7 @@ ll minv(ll a, ll b, bool b_is_prime = false) { // O(log(n))
 
     // Non-prime
     vector<ll> ans = extendedGCD(a, b);
-    assert(ans[0] == 1);
+    assert(ans[0] == 1 && "GCD Extended Failed");
     return (ans[1] % b + b) % b;
 }
 
@@ -189,7 +183,7 @@ ll mod_div(ll a, ll b, ll m, bool m_is_prime = false) { // O(log(n))
 }
 
 /* --------------------------------------------------- Number Theory --------------------------------------------------- */
-bool prime(ll a) {
+bool prime(ll a) {  // Verified
     if (a == 1)
         return 0;
     for (ll i = 2; i <= round(sqrt(a)); ++i)
@@ -198,7 +192,7 @@ bool prime(ll a) {
     return 1;
 }
 
-ll gcd(ll a, ll b) {
+ll gcd(ll a, ll b) {  // O(log(min(a, b))) [Much faster practically]- verified
     if (!a || !b)
         return a | b;
     ull shift = __builtin_ctzll(a | b);
@@ -216,47 +210,34 @@ ll lcm(ll a, ll b) {
     return a / gcd(a, b) * b;
 }
 
-vector<ll> sieve(int n, vector<ll> *arr = new vector<ll>()) { // O(n)
-    (*arr).resize(n);
+vector<ll> sieve(ll n, vector<ll> *arr = new vector<ll>()) { // O(n) - Verified
+    (*arr).resize(n + 1);
     iota(arr->begin(), arr->end(), 0);
-    forn(i, 1)(*arr)[i] = i;
     vector<ll> vect;
     for (int i = 2; i <= n; i++)
         if ((*arr)[i] == i) {
             vect.push_back(i);
             for (int j = i; j <= n; j += i)
-                (*arr)[j] -= i / (*arr)[i];
+                (*arr)[j] = (*arr)[j] / i * (i - 1) ;
         }
     return vect;
 } // Returns primes; ETF Sieve;
 
-vector<ll> pFactors(ll n) { // O(sqrt(n))
+vector<ll> pfactors(ll n) { // O(sqrt(n)) - verified
     vector<ll> ans;
     ll res = n;
-    if (n % 2 == 0) {
-        res /= 2;
-        while (n % 2 == 0) {
-            ans.push_back(2);
-            n /= 2;
-        }
-    }
+    if (n % 2 == 0) { res /= 2; while (n % 2 == 0) { ans.push_back(2); n /= 2; } }
     for (ll i = 3; i <= sqrt(n); i += 2) {
         if (n % i == 0) {
-            while (n % i == 0) {
-                ans.push_back(i);
-                n /= i;
-            }
+            while (n % i == 0) { ans.push_back(i); n /= i; }
             res = (res / i * (i - 1));
         }
     }
-    if (n > 1) {
-        ans.push_back(n);
-        res = (res / n * (n - 1));
-    }
+    if (n > 1) { ans.push_back(n); res = (res / n * (n - 1)); }
     return ans;
 }
 
-ll phin(ll n) { // O(sqrt(n))
+ll phin(ll n) { // O(sqrt(n)) - verified
     ll res = n;
     if (n % 2 == 0) {
         res /= 2;
@@ -288,24 +269,26 @@ ll combination(ll n, ll r, ll m, ll *fact, ll *ifact) {
 /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Main Function @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
 int main() {
-    ios_base::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
+    ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);  // Fast IO
 
-    precal();
+    precal();  // Any precomputation
 
+    // Duration
     auto start1 = high_resolution_clock::now();
+
     int t = 1;
     cin >> t;
     while (t--) {
         solve();
     }
+
     auto stop1 = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(stop1 - start1);
 
+
 #ifndef ONLINE_JUDGE
-    freopen("warnings.txt", "w", stderr);
-    cerr << "Time: " << (float) duration.count() / 1000 << endl;
+    freopen("time.txt", "w", stderr);
+    cerr << "Time: " << (float) duration.count() / 1000 << "ms" << endl;
 #endif
 
     return 0;
@@ -313,16 +296,11 @@ int main() {
 
 // ######################################################## Solve ########################################################
 
-void precal() {}
+
+void precal() {
+
+}
 
 void solve() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    each(el, v)
-    cin >> el;
 
-    debug(v);
-
-    cout << (v.front() == 1 ? "YES" : "NO") << endl;
 }

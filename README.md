@@ -11,7 +11,7 @@ NOTE: This is not a tutorial. Strictly for personal reference. Refer at your own
 This guide is a stepwise methodology to set up the environment for competitive programming which I followed on **Fedora 41 Workstation**. All related code files are in the **"Setup"** folder. 
 
 ### **Step 1: Install Sublime Text 4**
-- Install **Sublime Text 4** on your system. You can follow the instructions for installation specific to Fedora.
+- Install **Sublime Text 4** on your system. You can follow the instructions for installation specific to your system.
 
 ### **Step 2: Configure the Build System**
 - The **build system code** is available in **"build.txt"**. Use the following code in your Sublime Text build system:
@@ -37,7 +37,15 @@ This guide is a stepwise methodology to set up the environment for competitive p
 
 This will bind the build command to the Ctrl + Enter key. If some code already exists add only the part of curly braces.
 
+### **Step 5: Install Package**
+- Enter `ctrl+shift+p`. Type and enter `install package`.
+- Again, Enter `ctrl+shift+p`. Type and enter `SublimeAStyleFormatter`.
+
 ### **Step 4: Install the "SublimeAStyleFormatter" Plugin**
+- Enter `ctrl+shift+p`. Type and enter `install package`.
+- Again, Enter `ctrl+shift+p`. Type and enter `SublimeAStyleFormatter`.
+
+If you did not understand this, try the following:
 - Install the SublimeAStyleFormatter plugin via Package Control in Sublime Text.
 - To install Package Control, go to Tools > Install Package Control (if you haven't installed it already).
 - Open Command Palette (Ctrl + Shift + P), type Install Package, and press Enter.
@@ -59,4 +67,9 @@ This will automatically format your code every time you save a file.
 - The output.txt file will be generated with the program output.
 - Your code will also be automatically formatted using the AStyle plugin.
 
-By following these steps, your environment will be set up for efficient competitive programming with automatic code formatting and streamlined build and run commands in Sublime Text.
+By following these steps, your environment will be set up for efficient competitive programming with automatic code formatting and streamlined build and run commands in Sublime Text.ls
+
+
+The cp template is saved in the `cp.cpp` file in the `Snippets` folder. Use the code in this to create a snippet in sublime text.
+Go to `Tools` > `Developer` > `New Snippet`.  
+For saving the content, go to https://snippet-generator.app/?description=&tabtrigger=&snippet=&mode=vscode and select `Sublime-Text` as an option.
