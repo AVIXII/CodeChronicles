@@ -1,14 +1,13 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-void pse(vector<int> &arr)
+void pse(vector<int> &arr)  // Monotonically Increasing Stack
 {
     stack<int> stk;
-    stk.push(-1);
 
     for (int i = 0; i < arr.size(); i++)
     {
-        while (stk.size() > 1 && arr[stk.top()] >= arr[i])
+        while (!stk.empty() && arr[stk.top()] >= arr[i])
             stk.pop();
 
         // Do something
@@ -16,14 +15,13 @@ void pse(vector<int> &arr)
     }
 }
 
-void pge(vector<int> &arr)
+void pge(vector<int> &arr)  // Monotonically Decreasing Stack
 {
     stack<int> stk;
-    stk.push(-1);
 
     for (int i = 0; i < arr.size(); i++)
     {
-        while (stk.size() > 1 && arr[stk.top()] <= arr[i])
+        while (!stk.empty() && arr[stk.top()] <= arr[i])
             stk.pop();
 
         // Do something
@@ -31,14 +29,13 @@ void pge(vector<int> &arr)
     }
 }
 
-void nse(vector<int> &arr)
+void nse(vector<int> &arr)  // Monotonically Increasing Stack
 {
     stack<int> stk;
-    stk.push(arr.size());
 
     for (int i = arr.size() - 1; i >= 0; i--)
     {
-        while (stk.size() > 1 && arr[stk.top()] >= arr[i])
+        while (!stk.empty() && arr[stk.top()] >= arr[i])
             stk.pop();
 
         // Do something
@@ -46,14 +43,13 @@ void nse(vector<int> &arr)
     }
 }
 
-void nse(vector<int> &arr)
+void nge(vector<int> &arr)  // Monotonically Decreasing Stack
 {
     stack<int> stk;
-    stk.push(arr.size());
 
     for (int i = arr.size() - 1; i >= 0; i--)
     {
-        while (stk.size() > 1 && arr[stk.top()] <= arr[i])
+        while (!stk.empty() && arr[stk.top()] <= arr[i])
             stk.pop();
 
         // Do something
@@ -63,6 +59,5 @@ void nse(vector<int> &arr)
 
 int main()
 {
-
     return 0;
 }
