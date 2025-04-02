@@ -51,6 +51,7 @@ strold = "rishi"
 strnew = "sam"
 limit = 3
 
+#  All the methods in strings return new strings and do not modify the original strings (Strings in python are immutable)
 s.upper()  # Converts all characters in the string to uppercase.
 s.lower()  # Converts all characters in the string to lowercase.
 s.capitalize() # Capitalizes the first character of the string and converts all other characters to lowercase.
