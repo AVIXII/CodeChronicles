@@ -27,19 +27,23 @@
 /* ------------------------------------------------------ Pragmas ------------------------------------------------------ */
 #pragma GCC optimize("O3")
 
+
 /* ------------------------------------------------------ Includes ----------------------------------------------------- */
 #include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
+
 
 /* ----------------------------------------------------- Namespaces ---------------------------------------------------- */
 using namespace std;
 using namespace __gnu_pbds;
 using namespace chrono;
 
-/* ------------------------------------------------- Function Definitions ----------------------------------------------- */
+
+/* ------------------------------------------------- Function Definitions ---------------------------------------------- */
 void precal();
 void solve();
+
 
 /* ------------------------------------------------------- Types ------------------------------------------------------- */
 typedef long long ll;
@@ -47,6 +51,7 @@ typedef unsigned long long ull;
 typedef long double ld;
 typedef pair<int, int> pii;
 typedef pair<long long, long long> pll;
+typedef vector<bool> vb;
 typedef vector<char> vc;
 typedef vector<int> vi;
 typedef vector<long long> vl;
@@ -57,7 +62,8 @@ typedef vector<pll> vll;
 template <typename T>
 using os = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
-/* ------------------------------------------------------- Defines ------------------------------------------------------ */
+
+/* ------------------------------------------------------ Defines ------------------------------------------------------ */
 #define pb push_back
 #define eb emplace_back
 #define ppb pop_back
@@ -70,147 +76,65 @@ using os = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_u
 #define sz(x) (int)(x.size())
 #define endl '\n'
 
+
 /* ------------------------------------------------------ For Loops ---------------------------------------------------- */
-#define forg(i, a, b, s) for (int i = (a); (s) > 0 ? i < (b) : i > (b); i += (s))
 #define forn(i, n) for (int i = 0; i < n; i++)
+#define forg(i, a, b, s) for (int i = (a); (s) > 0 ? i < (b) : i > (b); i += (s))
 #define each(el, v) for (auto &el : v)
 
-/* -------------------------------------------------- Typedef Constants ------------------------------------------------ */
-typedef long int int32;
-typedef unsigned long int uint32;
-typedef long long int int64;
-typedef unsigned long long int uint64;
 
 /* ------------------------------------------------------ Limits ------------------------------------------------------- */
-#define imax INT_MAX
 #define imin INT_MIN
-#define lmax LONG_MAX
+#define imax INT_MAX
 #define lmin LONG_MIN
-#define llmax LLONG_MAX
+#define lmax LONG_MAX
 #define llmin LLONG_MIN
+#define llmax LLONG_MAX
+
 
 /* ----------------------------------------------------- Directions ---------------------------------------------------- */
-// i++ for octadirectinal, i+=2 for quadradirectional
-int rotx[] = { -1, -1, 0, 1, 1, 1, 0, -1};
-int roty[] = {0, 1, 1, 1, 0, -1, -1, -1};
+// i++ for octadirectinal, i+=2 for quadradirectional - Verified
+int rotx[] = { -1, -1, 0, 1, 1, 1, 0, -1 };
+int roty[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
+
 
 /* ------------------------------------------------------ Utility ------------------------------------------------------ */
-string to_upper(string a) {
-    for (int i = 0; i < sz(a); ++i)
-        if (a[i] >= 'a' && a[i] <= 'z')
-            a[i] -= 'a' - 'A';
-    return a;
-}
+string to_upper(string a) { for (int i = 0; i < sz(a); ++i) if (a[i] >= 'a' && a[i] <= 'z') a[i] -= 'a' - 'A'; return a; }  // O(n) - Verified
 
-string to_lower(string a) {
-    for (int i = 0; i < sz(a); ++i)
-        if (a[i] >= 'A' && a[i] <= 'Z')
-            a[i] += 'a' - 'A';
-    return a;
-}
+string to_lower(string a) { for (int i = 0; i < sz(a); ++i) if (a[i] >= 'A' && a[i] <= 'Z') a[i] += 'a' - 'A'; return a; }  // O(n) - Verified
 
-void yes() { cout << "YES" << endl; }
+string yorn(bool check) { if (check) return "YES"; return "NO"; }  // O(1) - Verified
 
-void no() { cout << "NO" << endl; }
+mt19937 rng(steady_clock::now().time_since_epoch().count());  // O(1) - Verified
 
-mt19937 rng(steady_clock::now().time_since_epoch().count());
+ll random(ll l, ll r) { return uniform_int_distribution<ll>(l, r)(rng); }  // O(1) - Verified
 
-ll random(ll l, ll r) { return uniform_int_distribution<ll>(l, r)(rng); }
 
 /* ----------------------------------------- Exponentiation & Modulo Arithmetic ---------------------------------------- */
-ll exp(ll a, ll b, ll mod) {
-    a %= mod;
-    ll res = 1;
-    while (b) {
-        if (b & 1)
-            res = (res * a) % mod;
-        a = (a * a) % mod;
-        b >>= 1;
-    }
-    return res;
-}
+ll exp(ll a, ll b, ll mod) { a = (a % mod + mod) % mod ; ll res = 1; while (b) { if (b & 1) res = (res * a) % mod; a = (a * a) % mod; b >>= 1; } return res; } //  O(log b) - Verified
 
-void extendedGCDHelper(ll a, ll b, vector<ll> &arr) {
-    if (!b) {
-        arr[0] = a;
-        arr[1] = 1;
-        arr[2] = 0;
-        return;
-    }
-    extendedGCDHelper(b, a % b, arr);
-    arr[2] = arr[1] - (a / b) * (arr[1] = arr[2]);
-}
+ll mod_add(ll a, ll b, ll m) { a = a % m; b = b % m; return (((a + b) % m) + m) % m; }  // O(1) - Verified
 
-vector<ll> extendedGCD(ll a, ll b) { // O(log(n))
-    vector<ll> arr(3);
-    extendedGCDHelper(a, b, arr);
-    return arr;
-} // returns (g, a, b)
+ll mod_sub(ll a, ll b, ll m) { a = a % m; b = b % m; return (((a - b) % m) + m) % m; }  // O(1) - Verified
 
-ll mod_add(ll a, ll b, ll m) {
-    a = a % m;
-    b = b % m;
-    return (((a + b) % m) + m) % m;
-}
+ll mod_mul(ll a, ll b, ll m) { a = a % m; b = b % m; return (((a * b) % m) + m) % m; }  // O(1) - Verified
 
-ll mod_sub(ll a, ll b, ll m) {
-    a = a % m;
-    b = b % m;
-    return (((a - b) % m) + m) % m;
-}
+ll minv(ll a, ll b, bool b_is_prime = false) { assert(b != 1 && "Extended Euclidean Failed"); if (b_is_prime) return (gcd(a, b) == 1 ? exp(a, b - 2, b) : -1); vector<ll> ans = extendedGCD(a, b); assert(ans[0] == 1 && "Extended Euclidean Failed"); return (ans[1] % b + b) % b; }  // O(log b) - Verified
 
-ll mod_mul(ll a, ll b, ll m) {
-    a = a % m;
-    b = b % m;
-    return (((a * b) % m) + m) % m;
-}
+ll mod_div(ll a, ll b, ll m, bool m_is_prime = false) { a = a % m; b = b % m; return (mod_mul(a, minv(b, m, m_is_prime), m) + m) % m; }  // O(log b) - Verified
 
-ll minv(ll a, ll b, bool b_is_prime = false) { // O(log(n))
-    // Prime
-    if (b_is_prime)
-        return exp(a, b - 2, b);
-
-    // Non-prime
-    vector<ll> ans = extendedGCD(a, b);
-    assert(ans[0] == 1 && "GCD Extended Failed");
-    return (ans[1] % b + b) % b;
-}
-
-ll mod_div(ll a, ll b, ll m, bool m_is_prime = false) { // O(log(n))
-    a = a % m;
-    b = b % m;
-    return (mod_mul(a, minv(b, m, m_is_prime), m) + m) % m;
-}
 
 /* --------------------------------------------------- Number Theory --------------------------------------------------- */
-bool prime(ll a) {  // Verified
-    if (a == 1)
-        return 0;
-    for (ll i = 2; i <= round(sqrt(a)); ++i)
-        if (a % i == 0)
-            return 0;
-    return 1;
-}
+bool prime(ll a) { if (a == 1) return 0; for (ll i = 2; i <= round(sqrt(a)); ++i) if (a % i == 0) return 0; return 1; }  // O(sqrt(n)) - Verified
 
-ll gcd(ll a, ll b) {  // O(log(min(a, b))) [Much faster practically]- verified
-    if (!a || !b)
-        return a | b;
-    ull shift = __builtin_ctzll(a | b);
-    a >>= __builtin_ctzll(a);
-    do {
-        b >>= __builtin_ctzll(b);
-        if (a > b)
-            swap(a, b);
-        b -= a;
-    } while (b);
-    return a << shift;
-}
+ll gcd(ll a, ll b) { if (!a || !b) return a | b; a = abs(a); b = abs(b); ull shift = __builtin_ctzll(a | b); a >>= __builtin_ctzll(a); do { b >>= __builtin_ctzll(b); if (a > b) swap(a, b); b -= a; } while (b); return a << shift; }  // O(log(min(a, b))) [Much faster practically]- verified
 
-ll lcm(ll a, ll b) {
-    return a / gcd(a, b) * b;
-}
+void extendedGCDHelper(ll a, ll b, vector<ll> &arr) { if (!b) { arr[0] = a; arr[1] = 1; arr[2] = 0; return; } extendedGCDHelper(b, a % b, arr); arr[2] = arr[1] - (a / b) * (arr[1] = arr[2]); }  // O(log(min(a, b))) - Verified
+vector<ll> extendedGCD(ll a, ll b) { vector<ll> arr(3); extendedGCDHelper(a, b, arr); return arr; } // O(log(min(a, b))) - returns (g, a, b) - Verified
 
-vector<ll> sieve(ll n, vector<ll> *arr = new vector<ll>()) { // O(n) - Verified
+ll lcm(ll a, ll b) { return a / gcd(a, b) * b; }  // O(log(min(a, b))) - Verified
+
+vector<ll> sieve(ll n, vector<ll> *arr = new vector<ll>()) {
     (*arr).resize(n + 1);
     iota(arr->begin(), arr->end(), 0);
     vector<ll> vect;
@@ -221,7 +145,7 @@ vector<ll> sieve(ll n, vector<ll> *arr = new vector<ll>()) { // O(n) - Verified
                 (*arr)[j] = (*arr)[j] / i * (i - 1) ;
         }
     return vect;
-} // Returns primes; ETF Sieve;
+} // O(n) - Returns primes; ETF Sieve; - Verified
 
 vector<ll> pfactors(ll n) { // O(sqrt(n)) - verified
     vector<ll> ans;
@@ -250,8 +174,8 @@ ll phin(ll n) { // O(sqrt(n)) - verified
                 n /= i;
             res = (res / i * (i - 1));
         }
-    if (n > 1)
-        res = (res / n * (n - 1));
+
+    if (n > 1) res = (res / n * (n - 1));
     return res;
 }
 
@@ -262,30 +186,30 @@ ll combination(ll n, ll r, ll m, ll *fact, ll *ifact) {
     return mod_mul(mod_mul(val1, val2, m), val3, m);
 }
 
+
 /* ------------------------------------------------------ Constants ---------------------------------------------------- */
 #define MOD 1000000007
 #define PI 3.1415926535897932384626433832795
 
+
 /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Main Function @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
 int main() {
-    ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);  // Fast IO
+    ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    precal();  // Any precomputation
 
-    // Duration
-    auto start1 = high_resolution_clock::now();
+    auto start = high_resolution_clock::now();
+
+    precal();
 
     int t = 1;
     cin >> t;
-    while (t--) {
-        solve();
-    }
+    while (t--) solve();
 
-    auto stop1 = high_resolution_clock::now();
-    auto duration = duration_cast<microseconds>(stop1 - start1);
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(stop - start);
 
-
+    // IO
 #ifndef ONLINE_JUDGE
     freopen("time.txt", "w", stderr);
     cerr << "Time: " << (float) duration.count() / 1000 << "ms" << endl;
@@ -294,11 +218,10 @@ int main() {
     return 0;
 }
 
-// ######################################################## Solve ########################################################
 
+// ######################################################### Solve ########################################################
 
 void precal() {
-
 }
 
 void solve() {
