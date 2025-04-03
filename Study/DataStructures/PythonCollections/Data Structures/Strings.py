@@ -51,12 +51,13 @@ strold = "rishi"
 strnew = "sam"
 limit = 3
 
+#  All the methods in strings return new strings and do not modify the original strings (Strings in python are immutable)
 s.upper()  # Converts all characters in the string to uppercase.
 s.lower()  # Converts all characters in the string to lowercase.
 s.capitalize() # Capitalizes the first character of the string and converts all other characters to lowercase.
 s.title()  # Converts the first character of each word to uppercase and the rest to lowercase.
 s.strip()  # lstrip, rstrip; Removes leading and trailing whitespace (spaces, tabs, and newlines) from the string.
-s.replace(strold, strnew, limit)  # Replace the old occurences of a string with new occurences
+s.replace(strold, strnew, limit)  # Replace all the old occurences of a string with new occurences if limit not mentioned, then all the occurences.
 s.count("world")  # Counts the number of occurences of a given word in the 
 s.isalpha()  # Checks if the string consists only of alphabetic characters.
 s.isdigit() # Checks if the string consists only of digits.

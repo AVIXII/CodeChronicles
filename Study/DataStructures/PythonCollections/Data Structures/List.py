@@ -47,4 +47,5 @@ for i, e in enumerate(s):
 
 # Find - Check whether an element is present in the list or not
 el = 4
-isPresent = el in ls
+isPresent = el in ls  # Checks if the element is present in the list
+idx = ls.index(4)  # Returns index if the element exists in the list else raises an error.

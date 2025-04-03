@@ -47,7 +47,16 @@
 ### 1.6 Boolean Type
 - **bool**: Represents Boolean values.  
   Example: `True`, `False`
+- These are the only values which evaluate to falsy: False, None, 0, "", (), [], {}
+- The following also evaluates to false in py
+```py
+class myclass():
+  def __len__(self):
+    return 0
 
+myobj = myclass()
+print(bool(myobj))
+```
 ---
 
 ### 1.7 None Type

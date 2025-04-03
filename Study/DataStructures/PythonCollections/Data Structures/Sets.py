@@ -18,7 +18,7 @@ fruits.add("orange")
 print(fruits)  # Output will include "orange"
 
 # Removing an element from the set
-# Always check before removing from the set. Else it will raise an error.
+# Always check before removing from the set. Else it will raise an error. Use discard instead as it does not raise an error if element not found.
 if "banana" in fruits: fruits.remove("banana")
 print(fruits)  # Output will not include "banana"
 
@@ -47,6 +47,7 @@ print(difference_set)  # Output: {1, 2}
 # Symmetric Difference
 difference_set = set1 ^ set2  # or set1.difference(set2)
 print(difference_set)  # Output: {1, 2}
+
 
 
 
