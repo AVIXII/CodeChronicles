@@ -25,7 +25,7 @@
 //                                                    /\ \/ | >< | |
 
 /* ------------------------------------------------------ Pragmas ------------------------------------------------------ */
-#pragma GCC optimize("O3")
+#pragma GCC optimize("O3,unroll-loops")
 
 
 /* ------------------------------------------------------ Includes ----------------------------------------------------- */
@@ -111,6 +111,15 @@ ll random(ll l, ll r) { return uniform_int_distribution<ll>(l, r)(rng); }  // O(
 
 
 /* ----------------------------------------- Exponentiation & Modulo Arithmetic ---------------------------------------- */
+bool prime(ll n) { if (n < 2) return false; if (n == 2 || n == 3) return true; if (n % 2 == 0 || n % 3 == 0) return false; for (ll i = 5; i * i <= n; i += 6) if (n % i == 0 || n % (i + 2) == 0) return false; return true; }  // O(n) - Verified
+
+ll gcd(ll a, ll b) { if (!a || !b) return a | b; a = abs(a); b = abs(b); ull shift = __builtin_ctzll(a | b); a >>= __builtin_ctzll(a); do { b >>= __builtin_ctzll(b); if (a > b) swap(a, b); b -= a; } while (b); return a << shift; }  // O(log(min(a, b))) [Much faster practically]- verified
+
+ll lcm(ll a, ll b) { return a / gcd(a, b) * b; }  // O(log(min(a, b))) - Verified
+
+void extendedGCDHelper(ll a, ll b, vector<ll> &arr) { if (!b) { arr[0] = a; arr[1] = 1; arr[2] = 0; return; } extendedGCDHelper(b, a % b, arr); arr[2] = arr[1] - (a / b) * (arr[1] = arr[2]); }  // O(log(min(a, b))) - Verified
+vector<ll> extendedGCD(ll a, ll b) { vector<ll> arr(3); extendedGCDHelper(a, b, arr); return arr; } // O(log(min(a, b))) - returns (g, a, b) - Verified
+
 ll exp(ll a, ll b, ll mod) { a = (a % mod + mod) % mod ; ll res = 1; while (b) { if (b & 1) res = (res * a) % mod; a = (a * a) % mod; b >>= 1; } return res; } //  O(log b) - Verified
 
 ll mod_add(ll a, ll b, ll m) { a = a % m; b = b % m; return (((a + b) % m) + m) % m; }  // O(1) - Verified
@@ -125,67 +134,13 @@ ll mod_div(ll a, ll b, ll m, bool m_is_prime = false) { a = a % m; b = b % m; re
 
 
 /* --------------------------------------------------- Number Theory --------------------------------------------------- */
-bool prime(ll a) { if (a == 1) return 0; for (ll i = 2; i <= round(sqrt(a)); ++i) if (a % i == 0) return 0; return 1; }  // O(sqrt(n)) - Verified
+vector<ll> sieve(ll n, vector<ll> *arr = new vector<ll>()) { (*arr).resize(n + 1); iota(all(*arr), 0); vector<ll> vect; for (int i = 2; i <= n; i++) if ((*arr)[i] == i) { vect.push_back(i); for (int j = i; j <= n; j += i) (*arr)[j] = (*arr)[j] / i * (i - 1); } return vect;} // O(n) - Returns primes; ETF Sieve; - Verified
 
-ll gcd(ll a, ll b) { if (!a || !b) return a | b; a = abs(a); b = abs(b); ull shift = __builtin_ctzll(a | b); a >>= __builtin_ctzll(a); do { b >>= __builtin_ctzll(b); if (a > b) swap(a, b); b -= a; } while (b); return a << shift; }  // O(log(min(a, b))) [Much faster practically]- verified
+vector<ll> pfactors(ll n) { vector<ll> ans; ll res = n; if (n % 2 == 0) { res /= 2; while (n % 2 == 0) { ans.push_back(2); n /= 2; } } for (ll i = 3; i <= sqrt(n); i += 2) { if (n % i == 0) { while (n % i == 0) { ans.push_back(i); n /= i; } res = (res / i * (i - 1)); } } if (n > 1) { ans.push_back(n); res = (res / n * (n - 1)); } return ans; } // O(sqrt(n)) - verified
 
-void extendedGCDHelper(ll a, ll b, vector<ll> &arr) { if (!b) { arr[0] = a; arr[1] = 1; arr[2] = 0; return; } extendedGCDHelper(b, a % b, arr); arr[2] = arr[1] - (a / b) * (arr[1] = arr[2]); }  // O(log(min(a, b))) - Verified
-vector<ll> extendedGCD(ll a, ll b) { vector<ll> arr(3); extendedGCDHelper(a, b, arr); return arr; } // O(log(min(a, b))) - returns (g, a, b) - Verified
+ll phin(ll n) { ll res = n; if (n % 2 == 0) { res /= 2; while (n % 2 == 0) n /= 2; } for (ll i = 3; i <= sqrt(n); i += 2) if (n % i == 0) { while (n % i == 0) n /= i; res = (res / i * (i - 1)); } if (n > 1) res = (res / n * (n - 1)); return res; } // O(sqrt(n)) - verified
 
-ll lcm(ll a, ll b) { return a / gcd(a, b) * b; }  // O(log(min(a, b))) - Verified
-
-vector<ll> sieve(ll n, vector<ll> *arr = new vector<ll>()) {
-    (*arr).resize(n + 1);
-    iota(arr->begin(), arr->end(), 0);
-    vector<ll> vect;
-    for (int i = 2; i <= n; i++)
-        if ((*arr)[i] == i) {
-            vect.push_back(i);
-            for (int j = i; j <= n; j += i)
-                (*arr)[j] = (*arr)[j] / i * (i - 1) ;
-        }
-    return vect;
-} // O(n) - Returns primes; ETF Sieve; - Verified
-
-vector<ll> pfactors(ll n) { // O(sqrt(n)) - verified
-    vector<ll> ans;
-    ll res = n;
-    if (n % 2 == 0) { res /= 2; while (n % 2 == 0) { ans.push_back(2); n /= 2; } }
-    for (ll i = 3; i <= sqrt(n); i += 2) {
-        if (n % i == 0) {
-            while (n % i == 0) { ans.push_back(i); n /= i; }
-            res = (res / i * (i - 1));
-        }
-    }
-    if (n > 1) { ans.push_back(n); res = (res / n * (n - 1)); }
-    return ans;
-}
-
-ll phin(ll n) { // O(sqrt(n)) - verified
-    ll res = n;
-    if (n % 2 == 0) {
-        res /= 2;
-        while (n % 2 == 0)
-            n /= 2;
-    }
-    for (ll i = 3; i <= sqrt(n); i += 2)
-        if (n % i == 0) {
-            while (n % i == 0)
-                n /= i;
-            res = (res / i * (i - 1));
-        }
-
-    if (n > 1) res = (res / n * (n - 1));
-    return res;
-}
-
-ll combination(ll n, ll r, ll m, ll *fact, ll *ifact) {
-    ll val1 = fact[n];
-    ll val2 = ifact[n - r];
-    ll val3 = ifact[r];
-    return mod_mul(mod_mul(val1, val2, m), val3, m);
-}
-
+ll combination(ll n, ll r, ll m, ll *fact, ll *ifact) { ll val1 = fact[n]; ll val2 = ifact[n - r]; ll val3 = ifact[r]; return mod_mul(mod_mul(val1, val2, m), val3, m); }
 
 /* ------------------------------------------------------ Constants ---------------------------------------------------- */
 #define MOD 1000000007
@@ -197,13 +152,12 @@ ll combination(ll n, ll r, ll m, ll *fact, ll *ifact) {
 int main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-
     auto start = high_resolution_clock::now();
 
     precal();
 
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while (t--) solve();
 
     auto stop = high_resolution_clock::now();
@@ -222,6 +176,7 @@ int main() {
 // ######################################################### Solve ########################################################
 
 void precal() {
+
 }
 
 void solve() {
