@@ -3,6 +3,19 @@
 */
 
 // DFS
+// Template
+/*
+dfs(v) {
+    if(visited[v]) return;
+
+    visited[v] = 1
+    // process
+
+    for(auto e: adj[v]) dfs(e)
+}
+*/
+
+// Code
 /*
 #include <bits/stdc++.h>
 using namespace std;
@@ -31,6 +44,31 @@ void dfsAll()
 */
 
 // BFS
+// Template
+/*
+// Remember - Only visited nodes are pushed into the queue
+bfs(v) {
+    if(visited[v]) return;
+
+    queue<int> q;
+    visited[v] = 1
+    q.push(v);
+
+    while(!q.empty()) {
+        int f = q.front(); q.pop();
+
+        // process
+        for(auto e: adj[v]) {
+            if(visited[e]) continue;
+
+            visited[e] = 1;
+            q.push(e);
+        }
+    }
+}
+*/
+
+// Code
 /*
 #include <bits/stdc++.h>
 using namespace std;
