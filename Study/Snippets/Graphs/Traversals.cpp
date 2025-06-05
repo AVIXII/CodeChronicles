@@ -46,7 +46,7 @@ void dfsAll()
 // BFS
 // Template
 /*
-// Remember - Only visited nodes are pushed into the queue
+// Remember - Only visited nodes are pushed into the queue. May change according to the questions.
 bfs(v) {
     if(visited[v]) return;
 
