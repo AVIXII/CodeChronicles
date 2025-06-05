@@ -44,6 +44,8 @@ void dfsAll()
 */
 
 // BFS
+// There are two ways to implement bfs: 1) Standard Queue method 2) Current level and next Level (Very useful in some cases)
+
 // Template
 /*
 // Remember - Only visited nodes are pushed into the queue. May change according to the questions.
