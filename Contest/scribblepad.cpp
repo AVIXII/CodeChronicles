@@ -49,18 +49,14 @@ void solve();
 typedef long long ll;
 typedef unsigned long long ull;
 typedef long double ld;
-typedef pair<int, int> pii;
+
+typedef pair<int, int> pi;
 typedef pair<long long, long long> pll;
-typedef vector<bool> vb;
-typedef vector<char> vc;
-typedef vector<int> vi;
-typedef vector<long long> vl;
-typedef vector<pii> vii;
-typedef vector<pll> vll;
+
 
 /* ----------------------------------------------------- Custom DS ----------------------------------------------------- */
 template <typename T>
-using os = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
 
 /* ------------------------------------------------------ Defines ------------------------------------------------------ */
@@ -103,15 +99,13 @@ string to_upper(string a) { for (int i = 0; i < sz(a); ++i) if (a[i] >= 'a' && a
 
 string to_lower(string a) { for (int i = 0; i < sz(a); ++i) if (a[i] >= 'A' && a[i] <= 'Z') a[i] += 'a' - 'A'; return a; }  // O(n) - Verified
 
-string yorn(bool check) { if (check) return "YES"; return "NO"; }  // O(1) - Verified
-
 mt19937 rng(steady_clock::now().time_since_epoch().count());  // O(1) - Verified
 
 ll random(ll l, ll r) { return uniform_int_distribution<ll>(l, r)(rng); }  // O(1) - Verified
 
 
 /* ----------------------------------------- Exponentiation & Modulo Arithmetic ---------------------------------------- */
-bool prime(ll a) { if (a == 1) return 0; for (ll i = 2; (long long) i * i <= a; ++i) if (a % i == 0) return 0; return 1; }  // O(sqrt(n)) - Verified
+bool prime(ll n) { if (n < 2) return false; if (n == 2 || n == 3) return true; if (n % 2 == 0 || n % 3 == 0) return false; for (ll i = 5; i * i <= n; i += 6) if (n % i == 0 || n % (i + 2) == 0) return false; return true; }  // O(n) - Verified
 
 ll gcd(ll a, ll b) { if (!a || !b) return a | b; a = abs(a); b = abs(b); ull shift = __builtin_ctzll(a | b); a >>= __builtin_ctzll(a); do { b >>= __builtin_ctzll(b); if (a > b) swap(a, b); b -= a; } while (b); return a << shift; }  // O(log(min(a, b))) [Much faster practically]- verified
 
@@ -136,16 +130,12 @@ ll mod_div(ll a, ll b, ll m, bool m_is_prime = false) { a = a % m; b = b % m; re
 /* --------------------------------------------------- Number Theory --------------------------------------------------- */
 vector<ll> sieve(ll n, vector<ll> *arr = new vector<ll>()) { (*arr).resize(n + 1); iota(all(*arr), 0); vector<ll> vect; for (int i = 2; i <= n; i++) if ((*arr)[i] == i) { vect.push_back(i); for (int j = i; j <= n; j += i) (*arr)[j] = (*arr)[j] / i * (i - 1); } return vect;} // O(n) - Returns primes; ETF Sieve; - Verified
 
-vector<ll> pfactors(ll n) { vector<ll> ans; ll res = n; if (n % 2 == 0) { res /= 2; while (n % 2 == 0) { ans.push_back(2); n /= 2; } } for (ll i = 3; i <= sqrt(n); i += 2) { if (n % i == 0) { while (n % i == 0) { ans.push_back(i); n /= i; } res = (res / i * (i - 1)); } } if (n > 1) { ans.push_back(n); res = (res / n * (n - 1)); } return ans; } // O(sqrt(n)) - verified
+vector<pair<ll, ll>> pfactors(ll n) { vector<pair<ll, ll>> ans; if (n % 2 == 0) { ll count = 0; while (n % 2 == 0) { n /= 2; count++; } ans.push_back({2, count}); } for (ll i = 3; i <= sqrt(n); i += 2) if (n % i == 0) { ll count = 0; while (n % i == 0) { n /= i; count++; } ans.push_back({i, count}); } if (n > 1) ans.push_back({n, 1}); return ans; }  // O(sqrt(n)) - Verified
 
 ll phin(ll n) { ll res = n; if (n % 2 == 0) { res /= 2; while (n % 2 == 0) n /= 2; } for (ll i = 3; i <= sqrt(n); i += 2) if (n % i == 0) { while (n % i == 0) n /= i; res = (res / i * (i - 1)); } if (n > 1) res = (res / n * (n - 1)); return res; } // O(sqrt(n)) - verified
 
-ll combination(ll n, ll r, ll m, ll *fact, ll *ifact) {
-    ll val1 = fact[n];
-    ll val2 = ifact[n - r];
-    ll val3 = ifact[r];
-    return mod_mul(mod_mul(val1, val2, m), val3, m);
-}
+ll combination(ll n, ll r, ll m, ll *fact, ll *ifact) { ll val1 = fact[n]; ll val2 = ifact[n - r]; ll val3 = ifact[r]; return mod_mul(mod_mul(val1, val2, m), val3, m); }
+
 
 /* ------------------------------------------------------ Constants ---------------------------------------------------- */
 #define MOD 1000000007
@@ -155,35 +145,35 @@ ll combination(ll n, ll r, ll m, ll *fact, ll *ifact) {
 /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Main Function @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
 int main() {
-    ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    auto start = high_resolution_clock::now();
+	auto start = high_resolution_clock::now();
 
-    precal();
+	precal();
 
-    int t = 1;
-    // cin >> t;
-    while (t--) solve();
+	int t = 1;
+	// cin >> t;
+	while (t--) solve();
 
-    auto stop = high_resolution_clock::now();
-    auto duration = duration_cast<microseconds>(stop - start);
+	auto stop = high_resolution_clock::now();
+	auto duration = duration_cast<microseconds>(stop - start);
 
-    // IO
+	// IO
 #ifndef ONLINE_JUDGE
-    freopen("time.txt", "w", stderr);
-    cerr << "Time: " << (float) duration.count() / 1000 << "ms" << endl;
+	freopen("debug.txt", "w", stderr);
+	__debug_stream() << "Time: " << (float) duration.count() / 1000 << "ms" << endl;
 #endif
 
-    return 0;
+	return 0;
 }
 
 
 // ######################################################### Solve ########################################################
 
 void precal() {
+
 }
-bool is_prime(ll n) { if (n < 2) return false; if (n == 2 || n == 3) return true; if (n % 2 == 0 || n % 3 == 0) return false; for (ll i = 5; i * i <= n; i += 6) if (n % i == 0 || n % (i + 2) == 0) return false; return true; }
 
 void solve() {
-    cout << is_prime(10);
+
 }
