@@ -174,6 +174,36 @@ void precal() {
 
 }
 
-void solve() {
+vector<int> dfs()
+{
 
+}
+
+void solve() {
+	int n, m; cin >> n >> m;
+	vector<vector<int>> adj(n + 1, vector<int>());
+	forn(i, m)
+	{
+		int u, v; cin >> u >> v;
+		adj[u].pb(v);
+		adj[v].pb(u);
+	}
+
+	priority_queue<int, vector<int>, greater<int>> pq;
+	pq.push(1);
+	unordered_set<int> prc;
+	prc.insert(1);
+
+	while (!pq.empty())
+	{
+		int u = pq.top(); pq.pop();
+		cout << u << " ";
+		for (int v : adj[u])
+			if (!prc.count(v))
+			{
+				pq.push(v);
+				prc.insert(v);
+			}
+	}
+	cout << endl;
 }
